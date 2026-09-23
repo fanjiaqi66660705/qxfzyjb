@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>致发展研究部 · 我的自荐书</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #0a0a1a;
+    --bg2: #13132b;
+    --accent: #7c5cff;
+    --accent2: #00d4ff;
+    --accent3: #ff5c8a;
+    --text: #e8e8f0;
+    --muted: #9a9ab0;
+    --card: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* 动态背景 */
+  .bg-orbs {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 20s ease-in-out infinite;
+  }
+  .orb1 { width: 500px; height: 500px; background: var(--accent); top: -10%; left: -10%; }
+  .orb2 { width: 400px; height: 400px; background: var(--accent2); top: 40%; right: -10%; animation-delay: -7s; }
+  .orb3 { width: 350px; height: 350px; background: var(--accent3); bottom: -10%; left: 30%; animation-delay: -14s; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(50px, -40px) scale(1.1); }
+    66% { transform: translate(-30px, 30px) scale(0.95); }
+  }
+
+  /* 粒子 */
+  #particles {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* 导航 */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,26,0.6);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .logo {
+    font-weight: 800;
+    font-size: 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  nav ul {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s;
+    position: relative;
+  }
+  nav a:hover { color: var(--text); }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; left: 0;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.3s;
+  }
+  nav a:hover::after { width: 100%; }
+
+  main { position: relative; z-index: 2; }
+
+  section {
+    min-height: 100vh;
+    padding: 120px 8% 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* 首屏 Hero */
+  .hero {
+    text-align: center;
+    position: relative;
+  }
+  .hero .badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 50px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--accent2);
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+  }
+  .hero h1 {
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero .subtitle {
+    font-size: clamp(18px, 2.5vw, 24px);
+    color: var(--muted);
+    max-width: 700px;
+    margin: 0 auto 40px;
+  }
+  .hero .cta-group {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    box-shadow: 0 10px 40px rgba(124,92,255,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 50px rgba(124,92,255,0.6);
+  }
+  .btn-ghost {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    backdrop-filter: blur(10px);
+  }
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--muted);
+    font-size: 13px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+  }
+
+  /* 章节标题 */
+  .section-head {
+    margin-bottom: 50px;
+  }
+  .section-head .tag {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .section-head h2 .accent { color: var(--accent); }
+
+  /* 关于我 */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 50px;
+    align-items: center;
+  }
+  .about-text p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  .about-text p strong { color: var(--text); }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+  }
+  .stat-card .num {
+    font-size: 42px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-card .label {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 8px;
+  }
+
+  /* 能力卡片 */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 0;
+  }
+  .card:hover::before { opacity: 0.08; }
+  .card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent);
+  }
+  .card .icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .card h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .card p {
+    color: var(--muted);
+    font-size: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .card-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--accent2);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s, transform 0.3s;
+  }
+  .card-link:hover {
+    color: var(--accent3);
+    transform: translateX(4px);
+  }
+
+  /* 平台嵌入展示框 */
+  .platform-showcase {
+    margin-top: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+  .platform-showcase .showcase-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: rgba(10,10,26,0.6);
+    border-bottom: 1px solid var(--border);
+  }
+  .platform-showcase .showcase-head .dots {
+    display: flex;
+    gap: 7px;
+  }
+  .platform-showcase .showcase-head .dots span {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #ff5f57;
+  }
+  .platform-showcase .showcase-head .dots span:nth-child(2) { background: #febc2e; }
+  .platform-showcase .showcase-head .dots span:nth-child(3) { background: #28c840; }
+  .platform-showcase .showcase-head .url-bar {
+    flex: 1;
+    margin-left: 12px;
+    padding: 6px 14px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .platform-showcase .showcase-head .tag-live {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: rgba(16,185,129,0.15);
+    color: var(--accent3);
+    font-weight: 600;
+  }
+  .platform-showcase iframe {
+    width: 100%;
+    height: 560px;
+    border: none;
+    display: block;
+    background: #fff;
+  }
+  .platform-showcase .showcase-tip {
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .platform-showcase .showcase-tip a {
+    color: var(--accent2);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* 为什么选择发展研究部 */
+  .reason-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px;
+  }
+  .reason {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 32px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+  .reason:hover {
+    border-color: var(--accent2);
+    transform: translateX(8px);
+  }
+  .reason .num {
+    flex-shrink: 0;
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+  }
+  .reason .text h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .reason .text p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* 未来计划 时间线 */
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-left: 40px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--accent3));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: all 0.6s;
+  }
+  .tl-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -40px; top: 8px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--accent2);
+  }
+  .tl-item h4 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    color: var(--accent2);
+  }
+  .tl-item .period {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .tl-item p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* 结尾 */
+  .ending {
+    text-align: center;
+  }
+  .ending .quote {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    line-height: 1.4;
+    max-width: 800px;
+    margin: 0 auto 40px;
+  }
+  .ending .quote .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .ending .signature {
+    color: var(--muted);
+    font-size: 16px;
+    margin-top: 30px;
+  }
+  .ending .heart {
+    display: inline-block;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+
+  /* 滚动显现动画 */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 响应式 */
+  @media (max-width: 768px) {
+    nav ul { gap: 16px; }
+    nav ul li:nth-child(n+3) { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    section { padding: 100px 6% 60px; }
+  }
+
+  /* 打字机光标 */
+  .cursor {
+    display: inline-block;
+    width: 3px;
+    background: var(--accent2);
+    margin-left: 4px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <div class="logo">✦ 自荐书</div>
+  <ul>
+    <li><a href="#about">关于我</a></li>
+    <li><a href="#why">为什么</a></li>
+    <li><a href="#strength">我的优势</a></li>
+    <li><a href="#plan">未来计划</a></li>
+  </ul>
+</nav>
+
+<main>
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="badge">🎓 校青协 · 发展研究部 面试</div>
+    <h1>
+      你好，我是<br>
+      <span class="gradient" id="typewriter"></span><span class="cursor"></span>
+    </h1>
+    <p class="subtitle">河南大学 · 思想政治教育 · 2026 级<br>用 AI 技术与田野调研，让志愿精神被看见、被衡量、被传承。</p>
+    <div class="cta-group">
+      <a href="#about" class="btn btn-primary">了解我 ↓</a>
+      <a href="#plan" class="btn btn-ghost">我的入选方案</a>
+      <a href="https://fanjiaqi66660705.github.io/" target="_blank" class="btn btn-ghost">🌐 个人主页</a>
+    </div>
+    <div class="scroll-hint">向下滚动，发现更多 ✨</div>
+  </section>
+
+  <!-- 关于我 -->
+  <section id="about">
+    <div class="section-head reveal">
+      <span class="tag">01 / About Me</span>
+      <h2>关于<span class="accent">我</span></h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>我是<strong>范嘉琪</strong>，河南大学思想政治教育专业 2026 级新生。一名兼具<strong>人文底蕴</strong>与<strong>数字技术</strong>的复合型青年。</p>
+        <p>我深耕中国舞十余年，多次登上市级、省级春晚 C 位舞台；熟练运用 AI 工具完成 PPT、网站、App、小游戏、音乐等<strong>全品类数字创作</strong>，持有阿里云 AI 初级与高级认证。</p>
+        <p>我曾实地调研医圣祠与汉宛城遗址，输出的文化传承研究成果获<strong>市级政府领导重视</strong>；也曾发起"阳光义卖"，募款全部捐赠希望工程。调研、创作、公益——是我理解世界、改变世界的三种方式。</p>
+        <p>发展研究部对我而言，不只是一个部门，更是一个让我<strong>把思考落地、让热爱发声</strong>的舞台。</p>
+      </div>
+      <div class="stats">
+        <div class="stat-card reveal">
+          <div class="num" data-target="10">0</div>
+          <div class="label">省市大型舞台演出</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="num" data-target="5">0</div>
+          <div class="label">类 AI 全品类创作</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="num" data-target="3">0</div>
+          <div class="label">年班委统筹经验</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="num" data-target="100">0</div>
+          <div class="label">投入热情(%)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 为什么选择发展研究部 -->
+  <section id="why">
+    <div class="section-head reveal">
+      <span class="tag">02 / Why This Department</span>
+      <h2>为什么是<span class="accent">发展研究部</span></h2>
+    </div>
+    <div class="reason-list">
+      <div class="reason reveal">
+        <div class="num">1</div>
+        <div class="text">
+          <h4>调研是我的底色</h4>
+          <p>我曾系统对比医圣祠与汉宛城遗址，通过实地走访、史料比对与多方访谈采集一手资料，调研成果获市级政府领导"具有指导意义"的评价。发展研究部的核心——调研与分析，正是我最擅长也最热爱的事。</p>
+        </div>
+      </div>
+      <div class="reason reveal">
+        <div class="num">2</div>
+        <div class="text">
+          <h4>公益是我的行动</h4>
+          <p>我发起过"阳光义卖"公益活动，从物资募集到现场售卖全流程统筹，募得善款全部捐赠希望工程。志愿服务不只是"做了"，更是"做好"——我希望用发展研究让每一次志愿活动都有清晰的目标、可衡量的效果。</p>
+        </div>
+      </div>
+      <div class="reason reveal">
+        <div class="num">3</div>
+        <div class="text">
+          <h4>技术是我的杠杆</h4>
+          <p>我能独立用 AI 完成 PPT、网站、App、小游戏开发，已上线个人主页与"栖光 LUMEN"班级管理 APP。我相信，数字技术能为青协的发展研究插上翅膀——让调研更高效、让传播更有力、让志愿更有温度。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 我的优势 -->
+  <section id="strength">
+    <div class="section-head reveal">
+      <span class="tag">03 / My Strengths</span>
+      <h2>我能为部门带来<span class="accent">什么</span></h2>
+    </div>
+    <div class="cards">
+      <div class="card reveal">
+        <div class="icon">🔍</div>
+        <h3>田野调研能力</h3>
+        <p>实地走访医圣祠、汉宛城遗址，通过史料比对与多方访谈输出结构化研究结论，成果获市级政府重视，具备扎实的调研方法论。</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🤖</div>
+        <h3>AI 全品类创作</h3>
+        <p>熟练运用 AI 完成 PPT、网站、App、小游戏、原创音乐，持有阿里云 AI 初级与高级认证，能为青协内容生产提质增效。</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">💻</div>
+        <h3>前端开发能力</h3>
+        <p>掌握 HTML/CSS/JS，独立开发个人数字品牌页与"栖光 LUMEN"班级管理 APP，能为青协搭建轻量化数字工具。</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🎤</div>
+        <h3>舞台表达与演讲</h3>
+        <p>十年中国舞功底，20 场省市大型舞台 C 位演出，国际模特巡演经验，具备出色的公众表达力与活动感染力。</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">📋</div>
+        <h3>组织统筹经验</h3>
+        <p>3+ 年班长、团支书、文艺委员经历，统筹 20+ 场大型活动，从策划到落地全流程把控，团队协作与执行力强。</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">❤️</div>
+        <h3>公益初心</h3>
+        <p>发起"阳光义卖"捐赠希望工程，以实际行动践行社会责任。志愿精神不是一时冲动，而是我长期坚守的价值观。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 未来计划 -->
+  <section id="plan">
+    <div class="section-head reveal">
+      <span class="tag">04 / My Proposal</span>
+      <h2>如果入选，我会给出<span class="accent">三个方案</span></h2>
+    </div>
+    <div class="cards">
+      <div class="card reveal">
+        <div class="icon">📊</div>
+        <h3>方案一 · 志愿调研数据支撑平台</h3>
+        <p>发展研究部的核心是"用数据说话"。我将发挥前端开发能力，搭建轻量化调研数据平台：志愿满意度问卷、项目成效追踪、数据可视化看板，为部门撰写调研报告与发展规划提供一手数据底座。</p>
+        <a href="platform/index.html" target="_blank" class="card-link">→ 体验我已搭建的平台原型</a>
+        <a href="https://fanjiaqi66660705.github.io/helper/" target="_blank" class="card-link" style="margin-left:12px">→ 同类开发作品「栖光 LUMEN」</a>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🔍</div>
+        <h3>方案二 · 志愿项目效能评估与发展报告</h3>
+        <p>借鉴我对医圣祠、汉宛城遗址的田野调研方法（成果获市级政府重视），我将带队系统评估青协志愿项目效能，定期输出调研报告与发展建议书，总结可复制的经验模式，为协会决策提供研究支撑。</p>
+        <a href="https://fanjiaqi66660705.github.io/" target="_blank" class="card-link">→ 查看我的调研与作品集</a>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🤖</div>
+        <h3>方案三 · AI 辅助调研提效</h3>
+        <p>我持有阿里云 AI 初/高级认证。我将把 AI 嵌入调研全流程：问卷设计、文献梳理、数据分析、报告撰写与可视化，让部门的研究产出更快、更专业，把人力释放到更有价值的分析与思考上。</p>
+        <a href="https://fanjiaqi66660705.github.io/" target="_blank" class="card-link">→ 查看我的 AI 作品集</a>
+      </div>
+    </div>
+
+    <!-- 方案一 · 平台原型实时演示 -->
+    <div class="platform-showcase reveal">
+      <div class="showcase-head">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="url-bar">platform/index.html · 志愿调研数据支撑平台</div>
+        <span class="tag-live">● LIVE 原型</span>
+      </div>
+      <iframe src="platform/index.html" title="志愿调研数据支撑平台"></iframe>
+      <div class="showcase-tip">
+        ↑ 上方为可交互原型，可直接在看板、问卷、项目追踪之间切换体验。
+        <a href="platform/index.html" target="_blank">在新窗口全屏打开 →</a>
+      </div>
+    </div>
+
+    <div class="timeline" style="margin-top: 60px;">
+      <div class="tl-item">
+        <h4>第一阶段 · 融入与熟悉</h4>
+        <div class="period">第 1 个月</div>
+        <p>梳理部门过往调研报告与研究课题，熟悉青协志愿项目全貌，主动参与每一次调研讨论，完成基础调研任务，建立信任与默契。</p>
+      </div>
+      <div class="tl-item">
+        <h4>第二阶段 · 调研落地</h4>
+        <div class="period">第 2-3 个月</div>
+        <p>从三个方案中选择部门最需要的一项优先推进，独立承担调研课题或数据平台搭建，产出第一份调研报告或数据看板。</p>
+      </div>
+      <div class="tl-item">
+        <h4>第三阶段 · 沉淀与带动</h4>
+        <div class="period">长期</div>
+        <p>推动部门建立常态化调研机制与研究成果沉淀库，让发展研究真正成为青协科学决策、持续进化的动力源。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结尾 -->
+  <section class="ending">
+    <p class="quote reveal">
+      "我不敢说我是最优秀的，<br>
+      但我敢说，我会是<span class="highlight">最用心</span>的那一个。"
+    </p>
+    <p class="reveal">给我一个机会，我会用行动证明——选择我，值得。</p>
+    <a href="#top" class="btn btn-primary" style="margin-top: 40px;">↑ 回到开头</a>
+    <p class="signature">此致<br>发展研究部 <span class="heart">❤️</span><br>—— 范嘉琪 · 河南大学 2026 级</p>
+    <div style="margin-top: 30px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href="https://fanjiaqi66660705.github.io/" target="_blank" class="btn btn-ghost">🌐 个人主页</a>
+      <a href="https://fanjiaqi66660705.github.io/helper/" target="_blank" class="btn btn-ghost">📱 栖光 LUMEN APP</a>
+    </div>
+  </section>
+</main>
+
+<script>
+  // 打字机效果
+  const text = "范嘉琪";
+  const target = document.getElementById('typewriter');
+  let i = 0;
+  function type() {
+    if (i < text.length) {
+      target.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, 120);
+    } else {
+      setTimeout(() => {
+        target.textContent = '';
+        i = 0;
+        type();
+      }, 3000);
+    }
+  }
+  type();
+
+  // 滚动显现
+  const reveals = document.querySelectorAll('.reveal');
+  const tlItems = document.querySelectorAll('.tl-item');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  
+  reveals.forEach(el => observer.observe(el));
+  tlItems.forEach(el => observer.observe(el));
+
+  // 数字滚动
+  const nums = document.querySelectorAll('.stat-card .num');
+  const numObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 60));
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = current;
+        }, 20);
+        numObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(n => numObserver.observe(n));
+
+  // 粒子背景
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.5 + 0.1;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(124, 92, 255, ${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // 平滑滚动导航高亮
+  const navLinks = document.querySelectorAll('nav a');
+  const sections = document.querySelectorAll('section');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      const top = sec.offsetTop - 150;
+      if (window.scrollY >= top) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === `#${current}` ? '#fff' : '';
+    });
+  });
+</script>
+
+</body>
+</html>

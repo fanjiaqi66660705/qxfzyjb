@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目成效追踪 · 志愿调研数据支撑平台</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">📊</div>
+    <span>志愿调研数据支撑平台</span>
+  </div>
+  <nav>
+    <a href="index.html">数据看板</a>
+    <a href="survey.html">满意度问卷</a>
+    <a href="projects.html" class="active">项目成效追踪</a>
+  </nav>
+</div>
+
+<div class="container">
+  <div class="page-title" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px">
+    <div>
+      <h1>项目成效追踪</h1>
+      <p>量化评估每个志愿项目的目标达成与社会影响</p>
+    </div>
+    <button class="btn btn-primary" id="addBtn">+ 新增项目</button>
+  </div>
+
+  <!-- 新增项目表单 -->
+  <div class="form-card" id="addForm" style="display:none;margin-bottom:28px;max-width:100%">
+    <h3 style="margin-bottom:20px">新增志愿项目</h3>
+    <form id="projectForm" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <div class="form-group">
+        <label>项目名称 <span class="req">*</span></label>
+        <input type="text" name="name" required placeholder="如：社区敬老陪伴">
+      </div>
+      <div class="form-group">
+        <label>项目类型 <span class="req">*</span></label>
+        <select name="type" required>
+          <option value="助老">助老</option>
+          <option value="教育">教育</option>
+          <option value="环保">环保</option>
+          <option value="文化">文化</option>
+          <option value="医疗">医疗</option>
+          <option value="公益">公益</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>志愿者人数 <span class="req">*</span></label>
+        <input type="text" name="volunteers" required placeholder="如：24">
+      </div>
+      <div class="form-group">
+        <label>服务时长(h) <span class="req">*</span></label>
+        <input type="text" name="hours" required placeholder="如：120">
+      </div>
+      <div class="form-group">
+        <label>满意度(1-5) <span class="req">*</span></label>
+        <input type="text" name="satisfaction" required placeholder="如：4.5">
+      </div>
+      <div class="form-group">
+        <label>成效指数(0-100) <span class="req">*</span></label>
+        <input type="text" name="effectiveness" required placeholder="如：88">
+      </div>
+      <div class="form-group">
+        <label>状态 <span class="req">*</span></label>
+        <select name="status" required>
+          <option value="进行中">进行中</option>
+          <option value="已完成">已完成</option>
+          <option value="筹备中">筹备中</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end;gap:10px">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <button type="button" class="btn btn-ghost" id="cancelBtn">取消</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 项目卡片列表 -->
+  <div id="projectCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script>
+setActiveNav();
+
+const addBtn = document.getElementById('addBtn');
+const addForm = document.getElementById('addForm');
+const cancelBtn = document.getElementById('cancelBtn');
+const projectForm = document.getElementById('projectForm');
+
+addBtn.addEventListener('click', () => {
+  addForm.style.display = 'block';
+  addForm.scrollIntoView({ behavior: 'smooth' });
+});
+cancelBtn.addEventListener('click', () => {
+  addForm.style.display = 'none';
+  projectForm.reset();
+});
+
+projectForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const fd = new FormData(projectForm);
+  const data = Object.fromEntries(fd.entries());
+  const projects = DataStore.getProjects();
+  projects.push({
+    id: Date.now(),
+    name: data.name,
+    type: data.type,
+    volunteers: parseInt(data.volunteers),
+    hours: parseInt(data.hours),
+    satisfaction: parseFloat(data.satisfaction),
+    effectiveness: parseInt(data.effectiveness),
+    status: data.status
+  });
+  DataStore.saveProjects(projects);
+  showToast('项目添加成功！');
+  projectForm.reset();
+  addForm.style.display = 'none';
+  renderProjects();
+});
+
+function effColor(eff) {
+  if (eff >= 85) return 'var(--accent3)';
+  if (eff >= 75) return 'var(--accent4)';
+  return 'var(--danger)';
+}
+
+function renderProjects() {
+  const projects = DataStore.getProjects();
+  const container = document.getElementById('projectCards');
+  container.innerHTML = projects.map(p => {
+    const color = effColor(p.effectiveness);
+    const statusTag = p.status === '进行中' ? 'tag-blue' : p.status === '已完成' ? 'tag-green' : 'tag-yellow';
+    return `
+    <div class="card" style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;backdrop-filter:blur(10px);transition:transform 0.25s,border-color 0.25s;cursor:default">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px">${p.type}</div>
+          <h3 style="font-size:18px">${p.name}</h3>
+        </div>
+        <span class="tag ${statusTag}">${p.status}</span>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+          <span style="color:var(--muted)">成效指数</span>
+          <span style="font-weight:700;color:${color}">${p.effectiveness}/100</span>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" style="width:${p.effectiveness}%;background:${color}"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:14px;border-top:1px solid var(--border)">
+        <div style="text-align:center">
+          <div style="font-size:20px;font-weight:800;color:var(--accent2)">${p.volunteers}</div>
+          <div style="font-size:11px;color:var(--muted)">志愿者</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:20px;font-weight:800;color:var(--accent2)">${p.hours}</div>
+          <div style="font-size:11px;color:var(--muted)">服务时长</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:20px;font-weight:800;color:var(--accent2)">⭐${p.satisfaction}</div>
+          <div style="font-size:11px;color:var(--muted)">满意度</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderProjects();
+</script>
+
+</body>
+</html>

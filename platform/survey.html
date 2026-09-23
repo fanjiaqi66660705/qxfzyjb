@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>满意度问卷 · 志愿调研数据支撑平台</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">📊</div>
+    <span>志愿调研数据支撑平台</span>
+  </div>
+  <nav>
+    <a href="index.html">数据看板</a>
+    <a href="survey.html" class="active">满意度问卷</a>
+    <a href="projects.html">项目成效追踪</a>
+  </nav>
+</div>
+
+<div class="container">
+  <div class="page-title">
+    <h1>志愿者满意度问卷</h1>
+    <p>采集一手反馈数据，为志愿项目优化与发展规划提供依据</p>
+  </div>
+
+  <div class="form-card">
+    <form id="surveyForm">
+      <div class="form-group">
+        <label>1. 您参与的志愿项目类型 <span class="req">*</span></label>
+        <select name="projectType" required>
+          <option value="">请选择</option>
+          <option value="助老">助老服务</option>
+          <option value="教育">教育支教</option>
+          <option value="环保">环保公益</option>
+          <option value="文化">文化服务</option>
+          <option value="医疗">医疗辅助</option>
+          <option value="公益">综合公益</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>2. 您对本次志愿活动的整体满意度 <span class="req">*</span></label>
+        <div class="radio-group" id="satGroup">
+          <label><input type="radio" name="satisfaction" value="1" required><span>1 很不满意</span></label>
+          <label><input type="radio" name="satisfaction" value="2"><span>2 不满意</span></label>
+          <label><input type="radio" name="satisfaction" value="3"><span>3 一般</span></label>
+          <label><input type="radio" name="satisfaction" value="4"><span>4 满意</span></label>
+          <label><input type="radio" name="satisfaction" value="5"><span>5 非常满意</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>3. 活动组织安排是否清晰有序 <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="organization" value="1" required><span>1 很差</span></label>
+          <label><input type="radio" name="organization" value="2"><span>2 较差</span></label>
+          <label><input type="radio" name="organization" value="3"><span>3 一般</span></label>
+          <label><input type="radio" name="organization" value="4"><span>4 较好</span></label>
+          <label><input type="radio" name="organization" value="5"><span>5 很好</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>4. 您是否愿意继续参与青协志愿活动 <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="willing" value="非常愿意" required><span>非常愿意</span></label>
+          <label><input type="radio" name="willing" value="愿意"><span>愿意</span></label>
+          <label><input type="radio" name="willing" value="一般"><span>一般</span></label>
+          <label><input type="radio" name="willing" value="不太愿意"><span>不太愿意</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>5. 您在活动中最大的收获是</label>
+        <textarea name="gain" placeholder="例如：锻炼了沟通能力、结识了志同道合的朋友、感受到服务社会的价值……"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>6. 对青协志愿工作的建议</label>
+        <textarea name="suggestion" placeholder="您的建议将帮助我们持续改进志愿服务质量……"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">提交问卷</button>
+      <button type="button" class="btn btn-ghost" id="resetBtn" style="margin-left:10px">重置</button>
+    </form>
+  </div>
+
+  <!-- 问卷结果统计 -->
+  <div style="margin-top:40px" id="resultSection" class="chart-grid">
+    <div class="chart-card">
+      <h3><span class="dot"></span>满意度分布</h3>
+      <div class="chart-box"><canvas id="satDistChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3><span class="dot"></span>继续参与意愿</h3>
+      <div class="chart-box"><canvas id="willingChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="table-wrap" style="margin-top:20px" id="respTableWrap">
+    <table>
+      <thead>
+        <tr>
+          <th>时间</th>
+          <th>项目类型</th>
+          <th>满意度</th>
+          <th>组织评价</th>
+          <th>参与意愿</th>
+          <th>收获</th>
+          <th>建议</th>
+        </tr>
+      </thead>
+      <tbody id="respTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script>
+setActiveNav();
+
+const form = document.getElementById('surveyForm');
+const surveys = DataStore.getSurveys();
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const fd = new FormData(form);
+  const data = Object.fromEntries(fd.entries());
+  const count = DataStore.addSurvey(data);
+  showToast(`提交成功！已累计回收 ${count} 份问卷`);
+  form.reset();
+  renderResults();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => form.reset());
+
+function renderResults() {
+  const list = DataStore.getSurveys();
+  const tbody = document.getElementById('respTable');
+
+  if (list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted)">暂无问卷数据，请先提交一份问卷</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = list.slice().reverse().map(r => `
+    <tr>
+      <td style="font-size:12px;color:var(--muted)">${r.time}</td>
+      <td><span class="tag tag-blue">${r.projectType}</span></td>
+      <td>⭐ ${r.satisfaction}/5</td>
+      <td>${r.organization}/5</td>
+      <td>${r.willing}</td>
+      <td style="max-width:180px;font-size:13px;color:var(--muted)">${r.gain || '-'}</td>
+      <td style="max-width:180px;font-size:13px;color:var(--muted)">${r.suggestion || '-'}</td>
+    </tr>
+  `).join('');
+
+  // 满意度分布
+  const dist = [0,0,0,0,0];
+  list.forEach(r => { dist[parseInt(r.satisfaction)-1]++; });
+  new Chart(document.getElementById('satDistChart'), {
+    type: 'bar',
+    data: {
+      labels: ['1分','2分','3分','4分','5分'],
+      datasets: [{
+        data: dist,
+        backgroundColor: ['#ef4444','#f59e0b','#eab308','#10b981','#06b6d4'],
+        borderRadius: 6
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
+
+  // 参与意愿
+  const willCount = {};
+  list.forEach(r => { willCount[r.willing] = (willCount[r.willing] || 0) + 1; });
+  new Chart(document.getElementById('willingChart'), {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(willCount),
+      datasets: [{
+        data: Object.values(willCount),
+        backgroundColor: ['#10b981','#06b6d4','#f59e0b','#ef4444'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { padding: 12 } } }
+    }
+  });
+}
+
+renderResults();
+</script>
+
+</body>
+</html>
